@@ -1,0 +1,10 @@
+INSERT INTO announcements (title, description, created_at, is_active, user_id, announcment_image_id) VALUES ('Title 11', 'Description 11', NOW(), true, 11, 11);
+INSERT INTO announcements (title, description, created_at, is_active, user_id, announcment_image_id) VALUES ('Title 12', 'Description 12', NOW(), true, 12, 12);
+INSERT INTO announcements (title, description, created_at, is_active, user_id, announcment_image_id) VALUES ('Title 13', 'Description 13', NOW(), true, 13, 13);
+INSERT INTO announcements (title, description, created_at, is_active, user_id, announcment_image_id) VALUES ('Title 14', 'Description 14', NOW(), true, 14, 14);
+INSERT INTO announcements (title, description, created_at, is_active, user_id, announcment_image_id) VALUES ('Title 15', 'Description 15', NOW(), true, 15, 15);
+INSERT INTO announcements (title, description, created_at, is_active, user_id, announcment_image_id) VALUES ('Title 16', 'Description 16', NOW(), true, 16, 16);
+INSERT INTO announcements (title, description, created_at, is_active, user_id, announcment_image_id) VALUES ('Title 17', 'Description 17', NOW(), true, 17, 17);
+INSERT INTO announcements (title, description, created_at, is_active, user_id, announcment_image_id) VALUES ('Title 18', 'Description 18', NOW(), true, 18, 18);
+INSERT INTO announcements (title, description, created_at, is_active, user_id, announcment_image_id) VALUES ('Title 19', 'Description 19', NOW(), true, 19, 19);
+INSERT INTO announcements (title, description, created_at, is_active, user_id, announcment_image_id) VALUES ('Title 20', 'Description 20', NOW(), true, 20, 20);

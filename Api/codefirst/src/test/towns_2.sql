@@ -1,0 +1,10 @@
+INSERT INTO towns (name) VALUES ('Wrocław');
+INSERT INTO towns (name) VALUES ('Gdańsk');
+INSERT INTO towns (name) VALUES ('Łódź');
+INSERT INTO towns (name) VALUES ('Poznań');
+INSERT INTO towns (name) VALUES ('Szczecin');
+INSERT INTO towns (name) VALUES ('Bydgoszcz');
+INSERT INTO towns (name) VALUES ('Lublin');
+INSERT INTO towns (name) VALUES ('Katowice');
+INSERT INTO towns (name) VALUES ('Rzeszów');
+INSERT INTO towns (name) VALUES ('Olsztyn');

@@ -1,0 +1,10 @@
+INSERT INTO orders (name, status, is_correct, is_protected, announcements_id) VALUES ('Order 1', 'PENDING', true, false, 1);
+INSERT INTO orders (name, status, is_correct, is_protected, announcements_id) VALUES ('Order 2', 'COMPLETED', true, false, 2);
+INSERT INTO orders (name, status, is_correct, is_protected, announcements_id) VALUES ('Order 3', 'PENDING', true, false, 3);
+INSERT INTO orders (name, status, is_correct, is_protected, announcements_id) VALUES ('Order 4', 'CANCELLED', true, false, 4);
+INSERT INTO orders (name, status, is_correct, is_protected, announcements_id) VALUES ('Order 5', 'PENDING', true, false, 5);
+INSERT INTO orders (name, status, is_correct, is_protected, announcements_id) VALUES ('Order 6', 'COMPLETED', true, false, 6);
+INSERT INTO orders (name, status, is_correct, is_protected, announcements_id) VALUES ('Order 7', 'PENDING', true, false, 7);
+INSERT INTO orders (name, status, is_correct, is_protected, announcements_id) VALUES ('Order 8', 'CANCELLED', true, false, 8);
+INSERT INTO orders (name, status, is_correct, is_protected, announcements_id) VALUES ('Order 9', 'PENDING', true, false, 9);
+INSERT INTO orders (name, status, is_correct, is_protected, announcements_id) VALUES ('Order 10', 'COMPLETED', true, false, 10);

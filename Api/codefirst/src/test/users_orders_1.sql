@@ -1,0 +1,10 @@
+INSERT INTO users_order (order_id, buyer_id, seller_id) VALUES (1, 2, 1);
+INSERT INTO users_order (order_id, buyer_id, seller_id) VALUES (2, 1, 2);
+INSERT INTO users_order (order_id, buyer_id, seller_id) VALUES (3, 4, 3);
+INSERT INTO users_order (order_id, buyer_id, seller_id) VALUES (4, 3, 4);
+INSERT INTO users_order (order_id, buyer_id, seller_id) VALUES (5, 6, 5);
+INSERT INTO users_order (order_id, buyer_id, seller_id) VALUES (6, 5, 6);
+INSERT INTO users_order (order_id, buyer_id, seller_id) VALUES (7, 8, 7);
+INSERT INTO users_order (order_id, buyer_id, seller_id) VALUES (8, 7, 8);
+INSERT INTO users_order (order_id, buyer_id, seller_id) VALUES (9, 10, 9);
+INSERT INTO users_order (order_id, buyer_id, seller_id) VALUES (10, 9, 10);

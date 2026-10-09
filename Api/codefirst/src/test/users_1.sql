@@ -1,0 +1,10 @@
+INSERT INTO users (first_name, last_name, password, email, town_id) VALUES ('Jan', 'Kowalski', 'pass1', 'jan.kowalski@example.com', 1);
+INSERT INTO users (first_name, last_name, password, email, town_id) VALUES ('Anna', 'Nowak', 'pass2', 'anna.nowak@example.com', 2);
+INSERT INTO users (first_name, last_name, password, email, town_id) VALUES ('Piotr', 'Wójcik', 'pass3', 'piotr.wojcik@example.com', 3);
+INSERT INTO users (first_name, last_name, password, email, town_id) VALUES ('Maria', 'Lewandowska', 'pass4', 'maria.lewandowska@example.com', 4);
+INSERT INTO users (first_name, last_name, password, email, town_id) VALUES ('Adam', 'Zieliński', 'pass5', 'adam.zielinski@example.com', 5);
+INSERT INTO users (first_name, last_name, password, email, town_id) VALUES ('Ewa', 'Kowalczyk', 'pass6', 'ewa.kowalczyk@example.com', 6);
+INSERT INTO users (first_name, last_name, password, email, town_id) VALUES ('Robert', 'Mazur', 'pass7', 'robert.mazur@example.com', 7);
+INSERT INTO users (first_name, last_name, password, email, town_id) VALUES ('Kasia', 'Duda', 'pass8', 'kasia.duda@example.com', 8);
+INSERT INTO users (first_name, last_name, password, email, town_id) VALUES ('Tomasz', 'Kamiński', 'pass9', 'tomasz.kaminski@example.com', 9);
+INSERT INTO users (first_name, last_name, password, email, town_id) VALUES ('Beata', 'Wróbel', 'pass10', 'beata.wrobel@example.com', 10);

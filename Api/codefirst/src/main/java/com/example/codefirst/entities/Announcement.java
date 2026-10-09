@@ -4,7 +4,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.time.Instant;
@@ -40,8 +42,12 @@ public class Announcement{
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "announcment_image_id", nullable = false)
+    @ManyToMany 
+    @JoinColumn(name = "announcment_image_id",nullable = false)
     private AnnouncementsImage announcementsImage;
+
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 }
 

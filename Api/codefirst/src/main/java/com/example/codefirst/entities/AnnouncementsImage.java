@@ -5,6 +5,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -23,8 +24,8 @@ public class AnnouncementsImage{
     @Column(name = "image_data", nullable = false,columnDefinition = "LONGBLOB")
     private byte[] imageData;
 
-    @ManyToOne
-    @JoinColumn(name = "announcement_images_id", nullable = false)
-    private AnnouncementsImage announcementImages;
+    @ManyToMany 
+    @JoinColumn(name = "announcement_id",nullable = false)
+    private Announcement announcement_id;
 }
 

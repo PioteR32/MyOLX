@@ -37,7 +37,7 @@ public class AnnouncementService {
                     announcement.setDescription(announcementDetails.getDescription());
                     announcement.setActive(announcementDetails.isActive());
                     announcement.setUser(announcementDetails.getUser());
-                    announcement.setAnnouncementsImage(announcementDetails.getAnnouncementsImage());
+                    // announcement.setAnnouncementsImage(announcementDetails.getAnnouncementsImage());
                     // Note: createdAt is usually handled by @CreatedDate, so we don't update it
                     return announcementRepository.save(announcement);
                 })

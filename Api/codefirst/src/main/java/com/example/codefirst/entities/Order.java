@@ -31,8 +31,8 @@ public class Order{
     @Column(nullable = false)
     private boolean isProtected;
     
-    @OneToOne
-    @JoinColumn(name = "announcements_id",nullable = false)
+    @OneToOne(cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "announcement_id", nullable = false)
     private Announcement  announcement;
 
     

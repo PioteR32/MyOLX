@@ -7,9 +7,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 
@@ -42,12 +44,11 @@ public class Announcement{
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToMany 
-    @JoinColumn(name = "announcment_image_id",nullable = false)
-    private AnnouncementsImage announcementsImage;
+    @OneToMany(mappedBy = "announcement", cascade = jakarta.persistence.CascadeType.ALL)
+    private List<AnnouncementsImage> announcementsImages;
 
-    @OneToOne
-    @JoinColumn(name = "order_id")
+    @OneToOne(cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 }
 

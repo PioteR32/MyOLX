@@ -48,7 +48,7 @@ public class Announcement{
     private List<AnnouncementsImage> announcementsImages;
 
     @OneToOne(cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = true)
     private Order order;
 }
 

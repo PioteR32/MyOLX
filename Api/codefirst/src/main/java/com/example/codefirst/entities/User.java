@@ -11,9 +11,10 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,8 +22,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,12 +42,19 @@ public class User{
     @Column(nullable = false)
     private String email;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "seller", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     private List<UsersOrder> userListOrders = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "buyer", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     private List<UsersOrder> buyerListOrders = new ArrayList<>();
-    
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    private List<Announcement> announcements = new ArrayList<>();
+
+    @JsonIgnore
     @ManyToOne 
     @JoinColumn(name = "town_id", nullable = false)
     private Town town;

@@ -8,6 +8,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import lombok.Data;
 
@@ -31,6 +33,7 @@ public class Order{
     @Column(nullable = false)
     private boolean isProtected;
     
+    @JsonIgnore
     @OneToOne(cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "announcement_id", nullable = false)
     private Announcement  announcement;

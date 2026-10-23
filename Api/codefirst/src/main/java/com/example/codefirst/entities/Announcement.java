@@ -17,7 +17,6 @@ import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import lombok.Data;
@@ -55,7 +54,7 @@ public class Announcement{
     @OneToMany(mappedBy = "announcement", cascade = jakarta.persistence.CascadeType.ALL)
     private List<AnnouncementsImage> announcementsImages;
 
-    @JsonIgnore
+   
     @OneToOne(cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "order_id", nullable = true)
     private Order order;

@@ -1,122 +1,101 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+// @ts-ignore
+import { useState, useEffect } from 'react';
+// @ts-ignore -- CSS side-effect imports are handled by the bundler.
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+// 1. Definiujemy interfejs dla ogłoszenia
+// Dzięki temu będziemy wiedzieć, jakie pola posiada każdy obiekt w tablicy
+interface Announcement {
+  id: number | string;
+  title?: string;
+  content?: string;
+  description?: string;
+  text?: string;
+  price?: number;
 }
 
-export default App
+function App() {
+  // 2. Definiujemy typy dla stanów za pomocą generyków
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Zakładamy, że backend działa na localhost:8082
+  const API_URL = 'http://localhost:8082/api/announcements';
+
+  const fetchAnnouncements = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(API_URL);
+      
+      console.log("Status odpowiedzi:", response.status, response.statusText);
+      
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+      
+      // Wskazujemy, że oczekujemy danych typu Announcement[]
+      const data: Announcement[] = await response.json();
+      setAnnouncements(data);
+      console.log("Dane otrzymane z backendu:", data);
+    } catch (err) {
+      // 3. Bezpieczna obsługa błędu w TypeScript
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Unknown error occurred');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  return (
+    <div id="root">
+      <header style={{ padding: '20px', borderBottom: '1px solid var(--border)' }}>
+        <h1 style={{ margin: 0 }}>Announcements</h1>
+      </header>
+      
+      <main id="center">
+        <div className="announcements-container">
+          {loading && <p>Loading announcements...</p>}
+          
+          {error && (
+            <div style={{ color: 'red', padding: '20px' }}>
+              <p>Error: {error}</p>
+              <p>Make sure the backend is running at {API_URL}</p>
+              <button onClick={fetchAnnouncements} className="counter">Retry</button>
+            </div>
+          )}
+
+          {!loading && !error && announcements.length === 0 && (
+            <p>No announcements found.</p>
+          )}
+          
+          <div className="announcements-list">
+            {!loading && !error && announcements.map((announcement) => (
+              <div key={announcement.id} className="announcement-card">
+                <h2>{announcement.title || 'No Title'}</h2>
+                {/* Wybieramy odpowiednie pole tekstowe, jeśli jedno z nich nie istnieje */}
+                <p>{announcement.content || announcement.description || announcement.text || 'No content available.'}</p>
+                {/* Bezpieczne wyświetlanie ceny z obsługą braku wartości */}
+                <p>Price: {announcement.price !== undefined ? `$${announcement.price.toFixed(2)}` : 'N/A'}</p>
+                <small>ID: {announcement.id}</small>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
+
+      <footer id="spacer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p>© 2026 MyOLX Announcements</p>
+      </footer>
+    </div>
+  );
+}
+
+export default App;

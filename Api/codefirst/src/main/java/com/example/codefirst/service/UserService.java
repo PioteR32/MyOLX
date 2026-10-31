@@ -26,11 +26,32 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    boolean isUserValid(User user) {
+         if (user.getId() != null) {
+            throw new IllegalArgumentException("New user cannot have an ID");
+        }
+        if (user.getFirstName() == null || user.getFirstName().trim().isEmpty() || user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("User name and email cannot be null or empty");
+        }
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("User password cannot be null or empty");
+        }
+        if(userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("User with this email already exists");
+        }
+        return true;
+    }
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
     public User save(User user) {
+        this.isUserValid(user);
         return userRepository.save(user);
     }
 
     public User update(Long id, User userDetails) {
+        this.isUserValid(userDetails);
+        
         return userRepository.findById(id)
                 .map(user -> {
                     user.setFirstName(userDetails.getFirstName());
@@ -45,6 +66,9 @@ public class UserService {
     }
 
     public void delete(Long id) {
+        if(userRepository.findById(id).isEmpty()) {
+            throw new RuntimeException("User not found with id " + id);
+        }
         userRepository.deleteById(id);
     }
 }

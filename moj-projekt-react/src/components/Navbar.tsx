@@ -17,11 +17,12 @@ const Navbar = () => {
             <li><Link to="/">Home</Link></li>
             <li><Link to="/announcements">Announcements</Link></li>
             <li><Link to="/liked">Liked</Link></li>
-            <li><Link to="/login" className="nav-login-item">Login</Link></li>
+            <li><Link to="/login">Login</Link></li>
+            <li><Link to="/register">Register</Link></li>
           </ul>
         </nav>
 
-        {/* 3. Empty Section for symmetry (Right) */}
+        {/* 3. Spacer Section (Right) to keep everything centered */}
         <div className="nav-section nav-section-right"></div>
       </div>
     </header>

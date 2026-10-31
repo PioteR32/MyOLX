@@ -1,10 +1,11 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import App from './App.tsx';
-import Layout from './components/Layout';
 import Home from './pages/Home';
 import AnnouncementsPage from './pages/AnnouncementsPage';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import LikedPage from './pages/LikedPage';
+import Layout from './components/Layout';
 import './App.css';
 
 function AppRouter() {
@@ -16,6 +17,7 @@ function AppRouter() {
           <Route path="announcements" element={<AnnouncementsPage />} />
           <Route path="liked" element={<LikedPage />} />
           <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
         </Route>
       </Routes>
     </Router>

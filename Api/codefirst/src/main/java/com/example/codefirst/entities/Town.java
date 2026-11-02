@@ -16,6 +16,13 @@ import lombok.Data;
 @Table(name = "towns")
 @Data
 public class Town{
+
+    public Town() {
+    }
+    public Town(String name) {
+        this.name = name;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

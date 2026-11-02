@@ -2,13 +2,42 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Logging in with:', { email, password });
-    // For now, just navigate to home after "login"
+    e.preventDefault();
+    
+
+    try {
+      const response = await fetch('http://localhost:8082/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        alert('Login successful!');
+        console.log('Login successful:', await response.json());
+        navigate('/login');
+      } else {
+        const data = await response.json();
+        console.log('Error response:', data.message);  
+        setError(data.message || 'Login failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      setError('An error occurred. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
     alert('Login successful (mock)');
     window.location.href = '/';
   };

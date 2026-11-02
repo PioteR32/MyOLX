@@ -25,6 +25,9 @@ public class TownService {
     public Optional<Town> findById(Long id) {
         return townRepository.findById(id);
     }
+    public Optional<Town> findByName(String name) {
+        return townRepository.findByName(name);
+    }
 
     public Town save(Town town) {
         return townRepository.save(town);

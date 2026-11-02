@@ -8,7 +8,8 @@ const Register = () => {
     lastName: '',
     email: '',
     password: '',
-    phone_num: ''
+    phone_num: '',
+    town_name: '',
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,12 +35,15 @@ const Register = () => {
 
       if (response.ok) {
         alert('Registration successful! Please log in.');
+        console.log('Registration successful:', await response.json());
         navigate('/login');
       } else {
         const data = await response.json();
+        console.log('Error response:', data.message);  
         setError(data.message || 'Registration failed. Please try again.');
       }
     } catch (err) {
+      console.error('Error:', err);
       setError('An error occurred. Please try again later.');
     } finally {
       setLoading(false);
@@ -135,7 +139,19 @@ const Register = () => {
             style={{ padding: '10px', borderRadius: '4px', border: '1px solid var(--border)' }}
           />
         </div>
-
+        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+          <label htmlFor="town_name">Town Name</label>
+          <input
+            id="town_name"
+            name="town_name"
+            type="text"
+            required
+            value={formData.town_name}
+            onChange={handleChange}
+            style={{ padding: '10px', borderRadius: '4px', border: '1px solid var(--border)' }}
+          />
+        </div>
+        
         <button
           type="submit"
           disabled={loading}

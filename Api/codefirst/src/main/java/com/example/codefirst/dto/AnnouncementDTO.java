@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.util.List;
 
 public record AnnouncementDTO(
-    Long id,
     String title,
     String description,
     BigDecimal price,

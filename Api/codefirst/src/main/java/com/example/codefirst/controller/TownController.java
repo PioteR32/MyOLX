@@ -28,6 +28,12 @@ public class TownController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Town> getTownByName(@PathVariable String name) {
+        return townService.findByName(name)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @PostMapping
     public Town createTown(@RequestBody Town town) {

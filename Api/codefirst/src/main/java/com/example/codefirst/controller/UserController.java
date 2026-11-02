@@ -1,5 +1,8 @@
 package com.example.codefirst.controller;
 
+import com.example.codefirst.dto.OperationsDto.UserRegistrationDTO;
+import com.example.codefirst.dto.OperationsDto.UserLoginDTO;
+
 import com.example.codefirst.entities.User;
 import com.example.codefirst.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,16 @@ public class UserController {
         return userService.findAll();
     }
 
+
+    @PostMapping("/login")
+    public ResponseEntity<String> Login(@RequestBody UserLoginDTO userLoginDTO) {
+        try {
+            return ResponseEntity.ok(userService.Login(userLoginDTO));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return userService.findById(id)
@@ -30,7 +43,8 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
+    public User createUser(@RequestBody UserRegistrationDTO user) {
+        
         return userService.save(user);
     }
 

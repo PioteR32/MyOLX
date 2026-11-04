@@ -43,9 +43,12 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody UserRegistrationDTO user) {
-        
-        return userService.save(user);
+    public ResponseEntity<User> createUser(@RequestBody UserRegistrationDTO user) {
+        try {
+        return ResponseEntity.ok(userService.save(user));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")

@@ -24,22 +24,22 @@ const Login = () => {
       });
 
       if (response.ok) {
-        alert('Login successful!');
+        alert('Login successful (mock)');
         console.log('Login successful:', await response.json());
         navigate('/login');
       } else {
         const data = await response.json();
+        alert('Login failed (mock)');
         console.log('Error response:', data.message);  
         setError(data.message || 'Login failed. Please try again.');
       }
     } catch (err) {
       console.error('Error:', err);
       setError('An error occurred. Please try again later.');
+       
     } finally {
       setLoading(false);
     }
-    alert('Login successful (mock)');
-    window.location.href = '/';
   };
 
   return (

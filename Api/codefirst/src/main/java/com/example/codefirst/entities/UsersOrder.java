@@ -26,5 +26,5 @@ public class UsersOrder{
 
     @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false)
-    private User seller;
+    private  User seller;
 }

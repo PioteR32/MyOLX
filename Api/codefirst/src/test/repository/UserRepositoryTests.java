@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,18 +43,19 @@ public class UserRepositoryTests {
 
     private Town town;
 
-    private static final String FIRST_DUPLICATE_PHONE = "999999998";
-    private static final String SECOND_DUPLICATE_PHONE = "999999999";
+    private static final String FIRST_PHONE = "999999998";
+    private static final String SECOND_PHONE = "999999999";
+    private static final String FIRST_USER_EMAIL = "user@example.com";
     
     @BeforeEach
     void prepareData() {
         TestDataFactory factory = new TestDataFactory(entityManager);
         town = factory.createTown("Warszawa");
 
-        User user = factory.createUser("user@example.com", town);
+        User user = factory.createUser(FIRST_USER_EMAIL, town);
         User other = factory.createUser("other@example.com", town);
-        User third = factory.createUser("third@example.com", FIRST_DUPLICATE_PHONE, town);
-        User uninvolved = factory.createUser("uninvolved@example.com", SECOND_DUPLICATE_PHONE, town);
+        User third = factory.createUser("third@example.com", FIRST_PHONE, town);
+        User uninvolved = factory.createUser("uninvolved@example.com", SECOND_PHONE, town);
 
         factory.flushAndClear();
     }
@@ -73,7 +75,7 @@ public class UserRepositoryTests {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"12345678", "aaaaaaaaaa", "1234567890", "abcdefghij"})
+    @ValueSource(strings = {"12345678", "aaaaaaaaaa", "1234567890", "abcdefghij",""})
     void shouldNotCreateUserByPhoneNum(String phoneNum) {
         User user = new User();
         user.setFirstName("John");
@@ -87,7 +89,7 @@ public class UserRepositoryTests {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {FIRST_DUPLICATE_PHONE, SECOND_DUPLICATE_PHONE})
+    @ValueSource(strings = {FIRST_PHONE, SECOND_PHONE})
     void shouldNotCreateUserWithDuplicatePhoneNum(String phoneNum) {
         User user = new User();
         user.setFirstName("John");
@@ -99,5 +101,45 @@ public class UserRepositoryTests {
 
         assertThrows(DataIntegrityViolationException.class,
                 () -> repository.saveAndFlush(user));
+    }
+
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"@com.wp", "wewew", "122312", "user@@example.com", "", "   "})
+    void shouldNotCreateUserByEmail(String email) {
+        User user = new User();
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail(email);
+        user.setPassword(TestDataFactory.usersCorrectPasswords);
+        user.setTown(town);
+        assertThrows(ConstraintViolationException.class,
+                () -> repository.saveAndFlush(user));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {FIRST_USER_EMAIL})
+    void shouldNotCreateUserByDuplicateEmail(String email) {
+        User user = new User();
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail(email);
+        user.setPassword(TestDataFactory.usersCorrectPasswords);
+        user.setTown(town);
+        assertThrows(DataIntegrityViolationException.class,
+                () -> repository.saveAndFlush(user));
+    }
+    @ParameterizedTest
+    @ValueSource(strings = {FIRST_PHONE, FIRST_USER_EMAIL})
+    void shouldFindUserWithLogin(String login) {
+        assertThat(repository.findByLogin(login)).hasValueSatisfying(user ->
+                assertThat(login).isIn(user.getEmail(), user.getPhoneNum()));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "nonexistent@example.com", "12345678"})
+    void shouldNotFindUserWithLogin(String login) {
+        assertThat(repository.findByLogin(login)).isEmpty();
     }
 }

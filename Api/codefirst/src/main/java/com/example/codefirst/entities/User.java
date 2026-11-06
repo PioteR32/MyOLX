@@ -7,6 +7,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -35,6 +37,7 @@ public class User{
     @Column(nullable = false)
     private String lastName;
 
+    
     @Column(nullable = false)
     private String password;
 
@@ -42,6 +45,8 @@ public class User{
     @Column(name = "phone_num",unique = true,length = 9)
     private String phoneNum;
 
+    @Email
+    @NotBlank
     @Column(nullable = false, unique = true)
     private String email;
 

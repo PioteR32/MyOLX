@@ -3,7 +3,6 @@ package com.example.codefirst.repository;
 import com.example.codefirst.entities.Order;
 import com.example.codefirst.entities.Town;
 import com.example.codefirst.entities.User;
-import com.example.repository.test.repository.TestDataFactory;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

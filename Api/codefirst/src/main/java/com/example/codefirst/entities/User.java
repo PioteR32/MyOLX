@@ -7,6 +7,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +38,11 @@ public class User{
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone_num")
+    @Pattern(regexp = "[1-9][0-9]{8}")
+    @Column(name = "phone_num",unique = true,length = 9)
     private String phoneNum;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @JsonIgnore

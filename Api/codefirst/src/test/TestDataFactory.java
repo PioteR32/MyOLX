@@ -1,4 +1,4 @@
-package com.example.repository.test.repository;
+package com.example.codefirst.repository;
 
 import com.example.codefirst.entities.Announcement;
 import com.example.codefirst.entities.Order;
@@ -6,7 +6,7 @@ import com.example.codefirst.entities.Town;
 import com.example.codefirst.entities.User;
 import com.example.codefirst.entities.UsersOrder;
 import jakarta.persistence.EntityManager;
-
+import java.util.List;
 import java.math.BigDecimal;
 
 /** Tworzy i zapisuje encje używane w testach. */
@@ -24,17 +24,53 @@ public class TestDataFactory {
         return town;
     }
 
-    public User createUser(String email, Town town) {
+//#region CreateUser
+
+    private int phoneNumCounter = 100000000;
+    private int getPhoneNumCounter() {
+        return phoneNumCounter++;
+    }
+    private void setPhoneNumCounter(int phoneNumCounter) {
+        if(phoneNumCounter < 100000000) {
+            throw new IllegalArgumentException("Phone number counter must be at least 100000000");
+        }
+        if(phoneNumCounter > 999999999) {
+            throw new IllegalArgumentException("Phone number counter must be at most 999999999");
+        }
+        this.phoneNumCounter = phoneNumCounter;
+    }
+    private static final List<String> firstNames = List.of("Jan", "Anna", "Piotr", "Katarzyna", "Michał", "Agnieszka", "Tomasz", "Magdalena", "Paweł", "Joanna");
+    private static final List<String> lastNames = List.of("Kowalski", "Nowak", "Wiśniewski", "Wójcik", "Kowalczyk", "Kamiński", "Lewandowski", "Zieliński", "Szymański", "Woźniak"); 
+
+    public static String getRandomFirstName() {
+        return firstNames.get((int) (Math.random() * firstNames.size()));
+    }
+    public static String getRandomLastName() {
+        return lastNames.get((int) (Math.random() * lastNames.size()));
+    }
+    
+    public static final String usersCorrectPasswords = "test-password";
+
+    public User createUser(String email,String phone, Town town, String password) {
         User user = new User();
-        user.setFirstName("Jan");
-        user.setLastName("Kowalski");
+        user.setFirstName(getRandomFirstName());
+        user.setLastName(getRandomLastName());
         user.setEmail(email);
-        user.setPassword("test-password");
-        user.setPhoneNum("123456789");
+        user.setPassword(password);
+        user.setPhoneNum(phone);
         user.setTown(town);
         entityManager.persist(user);
         return user;
     }
+
+    public User createUser(String email, String phone, Town town) {
+        return createUser(email, phone, town, usersCorrectPasswords);
+    }
+
+    public User createUser(String email, Town town) {
+        return createUser(email, String.valueOf(getPhoneNumCounter()), town, usersCorrectPasswords);
+    }
+//#endregion
 
     public Announcement createAnnouncement(User seller) {
         Announcement announcement = new Announcement();

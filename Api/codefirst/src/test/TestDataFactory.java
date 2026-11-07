@@ -1,4 +1,4 @@
-package com.example.codefirst.repository;
+package com.example.codefirst.test;
 
 import com.example.codefirst.entities.Announcement;
 import com.example.codefirst.entities.Order;

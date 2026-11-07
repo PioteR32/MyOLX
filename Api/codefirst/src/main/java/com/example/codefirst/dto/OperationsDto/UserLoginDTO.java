@@ -13,4 +13,9 @@ public class UserLoginDTO {
 
     @NotBlank(message = "Password is required")
     String password;
+
+    public UserLoginDTO(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
 }

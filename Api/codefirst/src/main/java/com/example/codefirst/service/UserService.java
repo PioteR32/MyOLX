@@ -33,14 +33,14 @@ public class UserService {
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
-    public String Login(UserLoginDTO userLoginDTO) {
+    public Optional<User> Login(UserLoginDTO userLoginDTO) {
       User user = userRepository.findByLogin(userLoginDTO.getLogin()).orElseGet(() -> {
           throw new RuntimeException("User not found with email or phone " + userLoginDTO.getLogin());
         });
         if(!user.getPassword().equals(userLoginDTO.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
-        return "1";
+        return Optional.ofNullable(user);
     }
     boolean isUserValid(UserRegistrationDTO user) {
         if (user.getFirstName() == null || user.getFirstName().trim().isEmpty() || user.getEmail() == null || user.getEmail().trim().isEmpty()) {

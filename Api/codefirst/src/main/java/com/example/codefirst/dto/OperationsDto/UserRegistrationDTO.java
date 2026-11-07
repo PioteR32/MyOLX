@@ -26,4 +26,13 @@ public class UserRegistrationDTO {
     
     @NotBlank(message = "Town name is required")
     private String town_name;
+
+    public UserRegistrationDTO(String firstName, String lastName, String email, String phoneNum, String password, String town_name) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNum = phoneNum;
+        this.password = password;
+        this.town_name = town_name;
+    }
 }

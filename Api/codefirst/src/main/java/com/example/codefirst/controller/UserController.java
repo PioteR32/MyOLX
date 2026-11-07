@@ -22,14 +22,15 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers() {
-        return userService.findAll();
+        return userService.findAll(); 
     }
 
 
     @PostMapping("/login")
     public ResponseEntity<String> Login(@RequestBody UserLoginDTO userLoginDTO) {
         try {
-            return ResponseEntity.ok(userService.Login(userLoginDTO));
+            return ResponseEntity.ok(userService.Login(userLoginDTO).map(user -> "User logged in successfully: " + user.getEmail())
+                    .orElse("User not found"));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

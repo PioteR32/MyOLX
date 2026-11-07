@@ -1,6 +1,6 @@
 package com.example.codefirst.service;
 import jakarta.persistence.EntityManager;
-import jakarta.validation.ConstraintViolationException;
+import org.springframework.context.annotation.Import;
 
 import com.example.codefirst.test.TestDataFactory;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.test.database.replace=none"
 })
+@Import(UserService.class)
 @TestExecutionListeners({
         DependencyInjectionTestExecutionListener.class,
         TransactionalTestExecutionListener.class
@@ -48,38 +49,38 @@ public class UserServiceTest {
     private static final String FIRST_USER_EMAIL = "first@example.com";
     private static final String FIRST_PHONE = "999999998";
 
-    private Town town;
+    private Long firstUserId;
 
 
     @BeforeEach
     void prepareData() {
         TestDataFactory factory = new TestDataFactory(entityManager);
-        town = factory.createTown("Warszawa");
+        Town town = factory.createTown("Warszawa");
         
-        User user = factory.createUser(FIRST_USER_EMAIL, town);
-        User other = factory.createUser("other@example.com", town);
-        User third = factory.createUser("third@example.com", FIRST_PHONE, town);
+        firstUserId = factory.createUser(FIRST_USER_EMAIL, town).getId();
+        factory.createUser("other@example.com", town);
+        factory.createUser("third@example.com", FIRST_PHONE, town);
 
         factory.flushAndClear();
     }
 
     @Test
     void shouldFindUserById() {
-        User user = userService.findById((Long)1L).orElse(null);
+        User user = userService.findById(firstUserId).orElse(null);
         assertThat(user).isNotNull();
         assertThat(user.getEmail()).isEqualTo(FIRST_USER_EMAIL);
     }
 
     @Test
     void shouldNotFindUserById() {
-        User user = userService.findById((Long)-12L).orElse(null);
+        User user = userService.findById(-12L).orElse(null);
         assertThat(user).isNull();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {FIRST_USER_EMAIL, FIRST_PHONE})
-    void shouldLogin() {
-        User user = userService.Login(new UserLoginDTO(FIRST_USER_EMAIL, TestDataFactory.usersCorrectPasswords)).orElse(null);
+    void shouldLogin(String login) {
+        User user = userService.Login(new UserLoginDTO(login, TestDataFactory.usersCorrectPasswords)).orElse(null);
         assertThat(user).isNotNull();
     }
 

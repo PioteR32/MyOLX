@@ -68,7 +68,7 @@ public class UserRepositoryTests {
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setEmail("shouldCreateUserTest@example.com");
-        user.setPassword(TestDataFactory.usersCorrectPasswords);
+        user.setPassword(TestDataFactory.usersCorrectPassword);
         user.setPhoneNum("999999997");
         user.setTown(town);
         int initialCount = repository.findAll().size();
@@ -83,7 +83,7 @@ public class UserRepositoryTests {
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setEmail("john.doe@example.com");
-        user.setPassword(TestDataFactory.usersCorrectPasswords);
+        user.setPassword(TestDataFactory.usersCorrectPassword);
         user.setPhoneNum(phoneNum);
         user.setTown(town);
         assertThrows(ConstraintViolationException.class,
@@ -97,7 +97,7 @@ public class UserRepositoryTests {
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setEmail("duplicate-phone@example.com");
-        user.setPassword(TestDataFactory.usersCorrectPasswords);
+        user.setPassword(TestDataFactory.usersCorrectPassword);
         user.setPhoneNum(phoneNum);
         user.setTown(town);
 
@@ -114,7 +114,7 @@ public class UserRepositoryTests {
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setEmail(email);
-        user.setPassword(TestDataFactory.usersCorrectPasswords);
+        user.setPassword(TestDataFactory.usersCorrectPassword);
         user.setTown(town);
         assertThrows(ConstraintViolationException.class,
                 () -> repository.saveAndFlush(user));
@@ -127,7 +127,7 @@ public class UserRepositoryTests {
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setEmail(email);
-        user.setPassword(TestDataFactory.usersCorrectPasswords);
+        user.setPassword(TestDataFactory.usersCorrectPassword);
         user.setTown(town);
         assertThrows(DataIntegrityViolationException.class,
                 () -> repository.saveAndFlush(user));
@@ -140,7 +140,7 @@ public class UserRepositoryTests {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "nonexistent@example.com", "12345678"})
+    @ValueSource(strings = {"", "nonexistent@example.com", "12345678", "' OR 1=1 -- "})
     void shouldNotFindUserWithLogin(String login) {
         assertThat(repository.findByLogin(login)).isEmpty();
     }

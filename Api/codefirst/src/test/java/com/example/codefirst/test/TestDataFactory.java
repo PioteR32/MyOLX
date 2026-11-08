@@ -49,7 +49,8 @@ public class TestDataFactory {
         return lastNames.get((int) (Math.random() * lastNames.size()));
     }
     
-    public static final String usersCorrectPasswords = "test-password";
+    public static final String usersCorrectPassword = "correct-password";
+    public static final String usersIncorrectPasswords = "incorrect-password";
 
     public User createUser(String email,String phone, Town town, String password) {
         User user = new User();
@@ -64,11 +65,11 @@ public class TestDataFactory {
     }
 
     public User createUser(String email, String phone, Town town) {
-        return createUser(email, phone, town, usersCorrectPasswords);
+        return createUser(email, phone, town, usersCorrectPassword);
     }
 
     public User createUser(String email, Town town) {
-        return createUser(email, String.valueOf(getPhoneNumCounter()), town, usersCorrectPasswords);
+        return createUser(email, String.valueOf(getPhoneNumCounter()), town, usersCorrectPassword);
     }
 //#endregion
 

@@ -1,5 +1,7 @@
 package com.example.codefirst.service;
 
+import com.example.codefirst.Exceptions.InvalidPasswordException;
+import com.example.codefirst.Exceptions.WhenEmailAlreadyExsistsException;
 import com.example.codefirst.dto.OperationsDto.UserLoginDTO;
 import com.example.codefirst.dto.OperationsDto.UserRegistrationDTO;
 
@@ -8,6 +10,9 @@ import com.example.codefirst.entities.Town;
 import com.example.codefirst.entities.User;
 import com.example.codefirst.repository.TownRepository;
 import com.example.codefirst.repository.UserRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,13 +40,14 @@ public class UserService {
     }
     public Optional<User> Login(UserLoginDTO userLoginDTO) {
       User user = userRepository.findByLogin(userLoginDTO.getLogin()).orElseGet(() -> {
-          throw new RuntimeException("User not found with email or phone " + userLoginDTO.getLogin());
+          throw new EntityNotFoundException("User not found with email or phone " + userLoginDTO.getLogin());
         });
         if(!user.getPassword().equals(userLoginDTO.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new InvalidPasswordException("Invalid password");
         }
         return Optional.ofNullable(user);
     }
+
     boolean isUserValid(UserRegistrationDTO user) {
         if (user.getFirstName() == null || user.getFirstName().trim().isEmpty() || user.getEmail() == null || user.getEmail().trim().isEmpty()) {
             throw new IllegalArgumentException("User name and email cannot be null or empty");
@@ -50,7 +56,7 @@ public class UserService {
             throw new IllegalArgumentException("User password cannot be null or empty");
         }
         if(userRepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("User with this email already exists");
+            throw new WhenEmailAlreadyExsistsException("User with this email already exists");
         }
         return true;
     }
@@ -63,7 +69,7 @@ public class UserService {
             throw new IllegalArgumentException("User password cannot be null or empty");
         }
         if(userRepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("User with this email already exists");
+            throw new WhenEmailAlreadyExsistsException("User with this email already exists");
         }
         return true;
     }

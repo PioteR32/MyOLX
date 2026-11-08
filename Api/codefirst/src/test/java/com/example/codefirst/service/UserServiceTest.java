@@ -1,16 +1,20 @@
 package com.example.codefirst.service;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
+
 import org.springframework.context.annotation.Import;
 
 import com.example.codefirst.test.TestDataFactory;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -18,11 +22,16 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 
 import com.example.codefirst.entities.User;
 import com.example.codefirst.entities.Town;
-import com.example.codefirst.dto.OperationsDto.UserLoginDTO;
 
+import com.example.codefirst.Exceptions.WhenEmailAlreadyExsistsException;
+import com.example.codefirst.Exceptions.InvalidPasswordException;
+
+import com.example.codefirst.dto.OperationsDto.UserLoginDTO;
+import com.example.codefirst.dto.OperationsDto.UserRegistrationDTO;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.nullable;
 
 
 @DataJpaTest(properties = {
@@ -50,12 +59,12 @@ public class UserServiceTest {
     private static final String FIRST_PHONE = "999999998";
 
     private Long firstUserId;
-
+    Town town;
 
     @BeforeEach
     void prepareData() {
         TestDataFactory factory = new TestDataFactory(entityManager);
-        Town town = factory.createTown("Warszawa");
+        town = factory.createTown("Warszawa");
         
         firstUserId = factory.createUser(FIRST_USER_EMAIL, town).getId();
         factory.createUser("other@example.com", town);
@@ -80,15 +89,79 @@ public class UserServiceTest {
     @ParameterizedTest
     @ValueSource(strings = {FIRST_USER_EMAIL, FIRST_PHONE})
     void shouldLogin(String login) {
-        User user = userService.Login(new UserLoginDTO(login, TestDataFactory.usersCorrectPasswords)).orElse(null);
+        User user = userService.Login(new UserLoginDTO(login, TestDataFactory.usersCorrectPassword)).orElse(null);
         assertThat(user).isNotNull();
     }
 
     @ParameterizedTest
-    @ValueSource(strings ={"wrong@example.com", "99999999999",""})
-    void shouldNotLogin(String login) {
-        assertThrows(RuntimeException.class, () -> {
-            userService.Login(new UserLoginDTO(login, TestDataFactory.usersCorrectPasswords));
+    @ValueSource(strings ={"wrong@example.com", "99999999999", "nn' OR 1 = 1 -- "})
+    void shouldThrowEntityNotFoundExceptionWhenLoggingInWithUnknownEmail(String login) {
+        assertThrows(EntityNotFoundException.class, () -> {
+            userService.Login(new UserLoginDTO(login, TestDataFactory.usersCorrectPassword));
         });
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(strings ={FIRST_USER_EMAIL, FIRST_PHONE})
+    void shouldThrowInvalidPasswordExceptionWhenLoggingInWithIncorrectPassword(String login) {
+        assertThrows(InvalidPasswordException.class, () -> {
+            userService.Login(new UserLoginDTO(login, TestDataFactory.usersIncorrectPasswords));
+        });
+    }
+    
+    @ParameterizedTest
+    @ValueSource(strings = {"not.existing.user@gmail.com"})
+    void shouldCreateUser(String email) {
+        UserRegistrationDTO user = new UserRegistrationDTO();
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail(email);
+        user.setPassword(TestDataFactory.usersCorrectPassword);
+        user.setTown_name(town.getName());
+        User savedUser = userService.save(user);
+        assertThat(savedUser.getId()).isNotNull();
+    }
+
+    
+    @ParameterizedTest
+    @NullSource
+    @NullAndEmptySource
+    void shouldThrowIllegalArgumentExceptionWhenCreatingUserWithNullOrEmptyEmail(String email) {
+        UserRegistrationDTO user = new UserRegistrationDTO();
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail(email);
+        user.setPassword(TestDataFactory.usersCorrectPassword);
+        user.setTown_name(town.getName());
+        assertThrows(IllegalArgumentException.class,
+                () -> userService.save(user));
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @NullAndEmptySource
+    void shouldThrowIllegalArgumentExceptionWhenCreatingUserWithNullOrEmptyPassword(String email) {
+        UserRegistrationDTO user = new UserRegistrationDTO();
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail(email);
+        user.setPassword(TestDataFactory.usersCorrectPassword);
+        user.setTown_name(town.getName());
+        assertThrows(IllegalArgumentException.class,
+                () -> userService.save(user));
+    }
+
+    @Test 
+    void shouldThrowEmailAlreadyExistsExceptionWhenCreatingUserWithExistingEmail() {
+        UserRegistrationDTO user = new UserRegistrationDTO();
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail(FIRST_USER_EMAIL);
+        user.setPassword(TestDataFactory.usersCorrectPassword);
+        user.setTown_name(town.getName());
+        assertThrows(WhenEmailAlreadyExsistsException.class,
+                () -> userService.save(user));
+
     }
 }

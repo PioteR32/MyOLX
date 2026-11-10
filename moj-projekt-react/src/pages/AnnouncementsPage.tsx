@@ -1,13 +1,6 @@
-import React, { useState, useEffect } from 'react';
-
-interface Announcement {
-  id: number | string;
-  title?: string;
-  content?: string;
-  description?: string;
-  text?: string;
-  price?: number;
-}
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import type { Announcement } from '../types/Announcement';
 
 const AnnouncementsPage = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -19,6 +12,7 @@ const AnnouncementsPage = () => {
   const fetchAnnouncements = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await fetch(API_URL);
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -59,12 +53,12 @@ const AnnouncementsPage = () => {
         
         <div className="announcements-list">
           {!loading && !error && announcements.map((announcement) => (
-            <div key={announcement.id} className="announcement-card">
+            <Link key={announcement.id} to={`/announcements/${encodeURIComponent(announcement.id)}`} className="announcement-card">
               <h2>{announcement.title || 'No Title'}</h2>
               <p>{announcement.content || announcement.description || announcement.text || 'No content available.'}</p>
-              <p>Price: {announcement.price !== undefined ? `$${announcement.price.toFixed(2)}` : 'N/A'}</p>
+              <p>Price: {announcement.price != null ? `$${announcement.price.toFixed(2)}` : 'N/A'}</p>
               <small>ID: {announcement.id}</small>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -201,6 +201,9 @@
 }
 
 .announcement-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
   background: var(--code-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -212,6 +215,52 @@
 .announcement-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow);
+}
+
+.announcement-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.announcement-details {
+  width: 100%;
+  max-width: 800px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 24px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.announcement-details > a {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--accent);
+}
+
+.announcement-details h1 {
+  line-height: 1.2;
+}
+
+.announcement-details section {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--code-bg);
+}
+
+.announcement-description {
+  white-space: pre-wrap;
+}
+
+.announcement-filter-options {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.announcement-filter-options li + li {
+  margin-top: 8px;
 }
 
 .announcement-card h2 {

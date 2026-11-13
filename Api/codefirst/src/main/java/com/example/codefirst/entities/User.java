@@ -12,6 +12,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import com.example.codefirst.enums.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,8 @@ public class User{
     @Column(nullable = false)
     private String lastName;
 
+    @Column(nullable = false)
+    private UserRole role = UserRole.U;
     
     @Column(nullable = false)
     private String password;
